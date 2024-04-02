@@ -117,7 +117,7 @@
 
 2.  **购物 / 出行 / 服务 类：**
 
-    Alibaba、AliExpress、Amazon、Andino、Apple、Apple App Store、Best Buy、Briscoes、Countdown、coupang、DHgate、eBay、Etsy、Google Play、Google Store、iHerb、instacart、kinopoisk.ru、Kmart、Myprotein、Newegg、New World、noel leeming、NZSALE、PBTech、sellersuniononline、Target、TheMarket、thewarehouse、Torpedo7、Trade Me、TreatMe、Walmart、warehouse stationery、Yelp
+    Alibaba、AliExpress、Amazon、Andino、Apple、Apple App Store、Best Buy、Briscoes、Bunnings、Countdown、coupang、DHgate、eBay、Etsy、Google Play、Google Store、iHerb、instacart、kinopoisk.ru、Kmart、Myprotein、Newegg、New World、noel leeming、NZSALE、PBTech、sellersuniononline、Target、TheMarket、thewarehouse、Torpedo7、Trade Me、TreatMe、Walmart、warehouse stationery、Yelp
 
     携程、当当、大众点评、多看、京东、一号店、马蜂窝、猫眼电影、美团、小米、小米有品、苏宁易购、天猫、淘宝、一淘、1688、阿里妈妈、阿里健康大药房、飞猪、途牛、搜款网、网商园
 
@@ -129,7 +129,7 @@
 
 4.  **新闻 / 社交 / 社区 类：**
 
-    aewtogether.org、allelitewrestling.com、e621.net、e-TALENTA、Facebook、IMDb、Imgur、Instagram、JavBus、Konachan、Microsoft Teams、njpwworld.com、Reddit、TapTap、Tumblr、TweetDeck、Twipu、Twitter、wattpad、web-zones.ru、XDA、yande.re
+    aewtogether.org、allelitewrestling.com、Bangumi、e621.net、e-TALENTA、Facebook、IMDb、Imgur、Instagram、JavBus、Konachan、Microsoft Teams、Mikan、njpwworld.com、Reddit、TapTap、Tumblr、TweetDeck、Twipu、Twitter、wattpad、web-zones.ru、XDA、yande.re
 
     115 网盘、爱发电、A 岛匿名版、巴哈姆特、百度贴吧、绅士仓库、豆瓣、堆糖、煎蛋、乐乎、萌娘百科、网易云音乐、NGA 玩家社区、QQ 空间、今日头条、微博、微信公众号
 

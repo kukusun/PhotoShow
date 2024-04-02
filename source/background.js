@@ -254,6 +254,8 @@
  *                                            // Updates: Better support for countdown.
  * @version 4.33.0.0 | 2024-03-24 | Vincent   // Updates: Better support for Flickr (GitHub issue #142), jd.com, PBTech, taobao, and YouTube;
  *                                            // Updates: Support newworld.co.nz and YouTube Music.
+ * @version 4.34.0.0 | 2024-04-02 | Vincent   // Updates: Better support for iStock;
+ *                                            // Updates: Support Bangumi (GitHub issue #147), Bunnings, and Mikan (GitHub issue #146).
  */
 
 // TODO: Extract websiteConfig to independent files and import them (after porting to webpack).
@@ -836,6 +838,26 @@ const websiteConfig = {
       processor: '$10$2'
     }
   },
+  '(?:bangumi|bgm)\\.tv|chii\\.in': {
+    amendStyles: {
+      pointerNone: '.overlay'
+    },
+    srcMatching: [
+      {
+        srcRegExp: '(lain\\.bgm\\.tv/).+?/(pic/cover/.+@IMG@)',
+        processor: '$1$2'
+      },
+      {
+        srcRegExp: '(//lain\\.bgm\\.tv/pic/user/)\\w(/.+@IMG@)',
+        processor: (_, src, srcRegExpObj) =>
+          srcRegExpObj.test(src) ? tools.detectImage(`${RegExp.$1}c${RegExp.$2}`, src).then(imgInfo => imgInfo.src) : ''
+      },
+      {
+        srcRegExp: '(lain\\.bgm\\.tv/pic/\\w+/)\\w(/.+@IMG@)',
+        processor: '$1l$2'
+      }
+    ]
+  },
   'www\\.behance\\.net': {
     amendStyles: {
       pointerAuto: '.ImageElement-blockPointerEvents-Rkg'
@@ -983,6 +1005,18 @@ const websiteConfig = {
       processor: (trigger, src, srcRegExpObj) =>
         srcRegExpObj.test(src || trigger.find('img').attr('src')) ? RegExp.$1 : ''
     }
+  },
+  '(?:.+\\.)?bunnings\\.(?:co\\.nz|com\\.au)': {
+    srcMatching: [
+      {
+        srcRegExp: '(media\\.prod\\.bunnings\\.com\\.au/[^?]+).*',
+        processor: '$1'
+      },
+      {
+        srcRegExp: '(.+?/image-id/\\w+).*',
+        processor: '$1'
+      }
+    ]
   },
   'cangku\\.\\w+': {
     amendStyles: {
@@ -2063,13 +2097,30 @@ const websiteConfig = {
   '(?:.+\\.)?(?:istockphoto|pexels|unsplash)\\.com': {
     srcMatching: [
       {
+        srcRegExp: '.+\\.istockphoto\\.com/id/(\\d+)/.+@IMG@',
+        processor: (_, src, srcRegExpObj) =>
+          srcRegExpObj.test(src)
+            ? new Promise((resolve, reject) => {
+                $.ajax('/collaboration/board_assets.json', {
+                  data: {
+                    asset_ids: RegExp.$1
+                  },
+                  success: response => {
+                    resolve(response[0]?.delivery_urls?.comp1024 || response[0]?.delivery_urls?.comp || '');
+                  },
+                  error: reject
+                });
+              })
+            : src
+      },
+      {
         srcRegExp: '(.+\\.(?:istockphoto|pexels|unsplash)\\.com/(?:[^?](?!video-id))+)(?:\\?.*)?$',
         processor: '$1'
       },
       {
         selectors: 'video',
         srcRegExp: '(.+\\.pexels\\.com/[^?]+).*',
-        processor: (trigger, src, srcRegExpObj) =>
+        processor: (trigger, _, srcRegExpObj) =>
           srcRegExpObj.test(trigger.parent().find('img').attr('src')) ? RegExp.$1 : ''
       }
     ]
@@ -2570,6 +2621,12 @@ const websiteConfig = {
         processor: '$1'
       }
     ]
+  },
+  'mikanani\\.(?:me|tv)': {
+    srcMatching: {
+      srcRegExp: '(.+@IMG@)\\?.*',
+      processor: '$1'
+    }
   },
   '(?:.+\\.)?mi-store(?:\\.(?:com|[a-z]{2}))+': {
     srcMatching: {

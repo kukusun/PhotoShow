@@ -113,7 +113,7 @@ Hereby is a list of part of the websites (hostnames) that **PhotoShow** currentl
 
 2.  **SHOPPING / TRADING / SERVICES:**
 
-    Alibaba, AliExpress, Alimama, Amazon, Andino, Apple, Apple App Store, Best Buy, Briscoes, Ctrip, Countdown, coupang, DHgate, dianping.com, eBay, Etsy, Google Play, Google Store, iHerb, instacart, JD, Kmart, mafengwo.cn, maoyan.com, meituan.com, Myprotein, Newegg, New World, noel leeming, NZSALE, PBTech, sellersuniononline, suning, Taobao, Target, TheMarket, thewarehouse, Tmall, Torpedo7, Trade Me, TreatMe, vvic.com, Walmart, warehouse stationery, wsy.com, Yelp
+    Alibaba, AliExpress, Alimama, Amazon, Andino, Apple, Apple App Store, Best Buy, Briscoes, Bunnings, Ctrip, Countdown, coupang, DHgate, dianping.com, eBay, Etsy, Google Play, Google Store, iHerb, instacart, JD, Kmart, mafengwo.cn, maoyan.com, meituan.com, Myprotein, Newegg, New World, noel leeming, NZSALE, PBTech, sellersuniononline, suning, Taobao, Target, TheMarket, thewarehouse, Tmall, Torpedo7, Trade Me, TreatMe, vvic.com, Walmart, warehouse stationery, wsy.com, Yelp
 
 3.  **SEARCHING / KNOWLEDGE / EXPERTISE:**
 
@@ -121,7 +121,7 @@ Hereby is a list of part of the websites (hostnames) that **PhotoShow** currentl
 
 4.  **NEWS / SOCIAL NETWORKING / FORUMS:**
 
-    115.com, adnmb2.com, aewtogether.org, afdian.net, allelitewrestling.com, cangku.icu, Duitang, e621.net, e-TALENTA, Facebook, gamer.com.tw, IMDb, Imgur, Instagram, Jandan, Konachan, LOFTER, Microsoft Teams, music.163.com, nga.cn, njpwworld.com, Qzone, Reddit, TapTap, toutiao.com, Tumblr, TweetDeck, Twipu, Twitter, Sina weibo, wattpad, WeChat webpages, web-zones.ru, XDA, yande.re
+    115.com, adnmb2.com, aewtogether.org, afdian.net, allelitewrestling.com, Bangumi, cangku.icu, Duitang, e621.net, e-TALENTA, Facebook, gamer.com.tw, IMDb, Imgur, Instagram, Jandan, Konachan, LOFTER, Microsoft Teams, Mikan, music.163.com, nga.cn, njpwworld.com, Qzone, Reddit, TapTap, toutiao.com, Tumblr, TweetDeck, Twipu, Twitter, Sina weibo, wattpad, WeChat webpages, web-zones.ru, XDA, yande.re
 
 5.  **VIDEOS / MUSIC:**
 
