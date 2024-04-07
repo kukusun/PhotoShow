@@ -256,6 +256,9 @@
  *                                            // Updates: Support newworld.co.nz and YouTube Music.
  * @version 4.34.0.0 | 2024-04-02 | Vincent   // Updates: Better support for iStock;
  *                                            // Updates: Support Bangumi (GitHub issue #147), Bunnings, and Mikan (GitHub issue #146).
+ * @version 4.35.0.0 | 2024-04-07 | Vincent   // Updates: Filter out YouTube shorts when in play, in response to user feedback;
+ *                                            // Updates: Support cnu.cc and addons.mozilla.org, in response to user feedback;
+ *                                            // Updates: Resume working for Google images (GitHub issue #148).
  */
 
 // TODO: Extract websiteConfig to independent files and import them (after porting to webpack).
@@ -1052,6 +1055,21 @@ const websiteConfig = {
         }
       ]
     },
+  '(?:.+\\.)?cnu\\.cc': {
+    amendStyles: {
+      pointerNone: 'a.thumbnail :not(img)'
+    },
+    srcMatching: [
+      {
+        srcRegExp: '(imgoss\\.cnu\\.cc/.+?x-oss-process=)[^&]+(.*)',
+        processor: '$1style/content$2'
+      },
+      {
+        srcRegExp: '(www\\.cnu\\.cc/uploads/avatar/images/\\w+_)\\d+(@IMG@)',
+        processor: '$1200$2'
+      }
+    ]
+  },
   '(?:.+\\.)?coupang\\.com': {
     amendStyles: {
       pointerNone: '.prod-image__item__border'
@@ -1949,27 +1967,9 @@ const websiteConfig = {
           ''
       },
       {
-        selectors: 'a[href*="#imgrc="] img',
-        processor: trigger => {
-          var link = trigger.closest('a').attr('href'),
-            imgId = /#imgrc=(.*)/.test(link) ? RegExp.$1 : '';
-
-          return /\/imgres\?imgurl=([^&]+)/.test(link)
-            ? decodeURIComponent(RegExp.$1)
-            : /\/search\?.*\btbm=isch\b/.test(link)
-            ? new Promise(resolve => {
-                $.ajax(link, {
-                  success: imgSearchResultDoc =>
-                    resolve(
-                      new RegExp(`"${imgId}",\\[.*?\\],\\["(https?:\/\/.+?)"(?:,\\d+)+\\]`).test(imgSearchResultDoc)
-                        ? JSON.parse(`"${RegExp.$1}"`)
-                        : ''
-                    ),
-                  error: () => resolve('')
-                });
-              })
-            : '';
-        }
+        selectors: 'a img',
+        processor: trigger =>
+          /imgurl=([^&]+)/.test(trigger.closest('a').attr('href')) ? decodeURIComponent(RegExp.$1) : ''
       }
     ],
     onToggle: isOn => {
@@ -1980,7 +1980,7 @@ const websiteConfig = {
           .filter(script => /^AF_initDataCallback\b/.test(script.text))
           .forEach(script => {
             [...script.text.matchAll(/"([-\w]{14})",\[.*?\],\["(https?:\/\/.+?)"(?:,\d+)+\]/g)].forEach(
-              ([match, id, hdSrc]) => {
+              ([_, id, hdSrc]) => {
                 try {
                   window.photoShowHdSrcCache = {
                     ...window.photoShowHdSrcCache,
@@ -2036,16 +2036,10 @@ const websiteConfig = {
     amendStyles: {
       pointerNone: 'a>img~*,.img-box~*,.video-info>img~*,.video-cover~*'
     },
-    srcMatching: [
-      {
-        srcRegExp: '(.+/cdnimage/.+?@IMG@).*',
-        processor: '$1'
-      },
-      {
-        srcRegExp: '(.+)x-oss-process=[^&]*&?(.*)',
-        processor: '$1$2'
-      }
-    ]
+    srcMatching: {
+      srcRegExp: '(.+/cdnimage/.+?@IMG@).*',
+      processor: '$1'
+    }
   },
   '(?:.+\\.)?iherb\\.com': {
     srcMatching: [
@@ -2643,6 +2637,18 @@ const websiteConfig = {
       {
         srcRegExp: 'commons\\.moegirl\\.org\\.cn/extensions/Avatar/avatar\\.php.*',
         processor: '$&&res=original&nocache'
+      }
+    ]
+  },
+  'addons\\.mozilla\\.org': {
+    srcMatching: [
+      {
+        srcRegExp: '(addons\\.mozilla\\.org/user-media/addon_icons/.+?-)\\d+(@IMG@)',
+        processor: '$1128$2'
+      },
+      {
+        srcRegExp: '(addons\\.mozilla\\.org/user-media/previews/)\\w+(/.+)@IMG@',
+        processor: '$1full$2.png'
       }
     ]
   },
@@ -3599,7 +3605,7 @@ const websiteConfig = {
   '(?:.+\\.)?youtube\\.com': {
     amendStyles: {
       pointerNone:
-        'a.ytd-thumbnail>:not(yt-image),a.ytd-playlist-thumbnail>:not(#playlist-thumbnails),#label-container,[page-subtype="home"] .ytd-rich-grid-media yt-image',
+        'a.ytd-thumbnail>:not(yt-image),a.ytd-playlist-thumbnail>:not(#playlist-thumbnails),#label-container,[page-subtype="home"] .ytd-rich-grid-media yt-image,.ytd-reel-video-renderer',
       pointerAuto: '[role="button"],[hovered] #label-container'
     },
     srcMatching: [
@@ -3612,7 +3618,8 @@ const websiteConfig = {
             src ||
               tools.getLargestImgSrc(trigger.siblings('[class*="-image"]')) ||
               tools.getLargestImgSrc(trigger.closest('a').find('.ytd-thumbnail img')) ||
-              tools.getLargestImgSrc(trigger.parent().find('ytmusic-thumbnail-renderer img'))
+              tools.getLargestImgSrc(trigger.parent().find('ytmusic-thumbnail-renderer img')) ||
+              tools.getLargestImgSrc(trigger.parent().find('.thumbnail img'))
           )
             ? tools
                 .detectImage(

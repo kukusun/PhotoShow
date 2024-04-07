@@ -573,7 +573,7 @@
         const generalMatchingRules = [
           {
             // Alibaba Cloud images.
-            srcRegExp: '(.+?\\?.*)&?x-oss-process=[^&]+(.*)',
+            srcRegExp: '(.+?\\?.*?)&?x-oss-process=[^&]+(.*)',
             processor: '$1$2'
           },
           {
