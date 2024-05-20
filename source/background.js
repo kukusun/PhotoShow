@@ -259,6 +259,8 @@
  * @version 4.35.0.0 | 2024-04-07 | Vincent   // Updates: Filter out YouTube shorts when in play, in response to user feedback;
  *                                            // Updates: Support cnu.cc and addons.mozilla.org, in response to user feedback;
  *                                            // Updates: Resume working for Google images (GitHub issue #148).
+ * @version 4.36.0.0 | 2024-05-20 | Vincent   // Updates: Adapt to twitter domain change;
+ *                                            // Updates: Better support for xiaohongshu and weibo.
  */
 
 // TODO: Extract websiteConfig to independent files and import them (after porting to webpack).
@@ -3255,11 +3257,12 @@ const websiteConfig = {
       }
     ]
   },
-  '(?:(?:.+\\.)?twitter|www\\.twipu)\\.com': {
+  '(?:(?:.+\\.)?twitter|x)\\.com': {
     amendStyles: {
       pointerNone:
-        '.PlayableMedia-player [data-testid="posterPlayBtn"],.PlayableMedia-player [data-testid="poster"]~div,.LastSeenProfiles__shadow,.css-175oi2r.r-sdzlij.r-1udh08x.r-u8s1d.r-1wyvozj.r-1v2oles.r-desppf:last-child,.css-175oi2r.r-1awozwy.r-6koalj.r-1pi2tsx.r-1777fci.r-xyw6el,.css-1dbjc4n.r-u8s1d:empty:not(.r-1loqt21)', // :not(.r-1loqt21): filter out video controller
-      pointerAuto: '.MomentMediaItem,.css-175oi2r.r-sdzlij.r-1udh08x.r-633pao.r-u8s1d.r-1wyvozj.r-1v2oles.r-desppf'
+        '.PlayableMedia-player [data-testid="posterPlayBtn"],.PlayableMedia-player [data-testid="poster"]~div,.LastSeenProfiles__shadow,.css-175oi2r.r-sdzlij.r-1udh08x.r-u8s1d.r-1wyvozj.r-1v2oles.r-desppf:last-child,.css-175oi2r.r-1awozwy.r-6koalj.r-1pi2tsx.r-1777fci.r-xyw6el,.css-1dbjc4n.r-u8s1d:empty:not(.r-1loqt21),.r-633pao:has(img)+.r-u8s1d', // :not(.r-1loqt21): filter out video controller
+      pointerAuto:
+        '.MomentMediaItem,.css-175oi2r.r-sdzlij.r-1udh08x.r-633pao.r-u8s1d.r-1wyvozj.r-1v2oles.r-desppf,.r-633pao:has(img)'
     },
     srcMatching: [
       {
@@ -3364,7 +3367,7 @@ const websiteConfig = {
   },
   '(?:.+\\.)?weibo\\.com': {
     amendStyles: {
-      pointerNone: '.picture-cover,.hoverMask,.wbs-pic .img_info,.avator img+i'
+      pointerNone: '.picture-cover,.hoverMask,.wbs-pic .img_info,.avator img+i,.woo-avatar-main:before'
     },
     srcMatching: [
       {
@@ -3435,6 +3438,31 @@ const websiteConfig = {
     srcMatching: {
       srcRegExp: '(.+?\\.xhscdn\\.com/[^?]+).*',
       processor: '$1'
+    },
+    onXhrLoad: (url, response) => {
+      const parseComments = comments => {
+        return (
+          comments?.reduce(
+            (acc, { id, pictures, sub_comments }) => [
+              ...acc,
+              ...(pictures.length ? [{ id, src: pictures[0].url_default }] : []),
+              ...parseComments(sub_comments)
+            ],
+            []
+          ) || []
+        );
+      };
+
+      // TODO: Replace the timer.
+      setTimeout(() => {
+        try {
+          if (/edith\.xiaohongshu\.com\/api\/sns\/web\/v\d\/comment/.test(url)) {
+            parseComments(JSON.parse(response).data?.comments).forEach(({ id, src }) => {
+              document.querySelector(`#comment-${id} .comment-picture img`)?.setAttribute('photoshow-hd-src', src);
+            });
+          }
+        } catch (error) {}
+      }, 500);
     }
   },
   'konachan\\.(?:com|net)|yande\\.re': {
